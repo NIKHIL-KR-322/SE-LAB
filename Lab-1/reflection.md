@@ -1,0 +1,13 @@
+# Lab 5 – Reflection
+
+**1. Which issues were the easiest to fix, and which were the hardest? Why?**
+The easiest were the style issues: unused imports, `== None`, `dict()`/`list()` calls, blank lines and line length. The tools give an exact line and the fix is mechanical. The hardest were the logic bugs, because no tool reports them. I only found them by reading the program output and asking whether it made sense (4 payment attempts instead of 3, a negative invoice, a refund of 999 for 25 days used). The encryption fix also took thought: I had to understand why ECB leaks patterns, then choose AES-GCM with a fresh random nonce and move the key out of the source.
+
+**2. Did the static analysis tools report any false positives? If so, describe one example.**
+Yes. After switching the invoice template to `default_filters=["h"]`, Bandit B702 still warned about Mako, because it flags every use of `mako.template.Template` whether or not the output is escaped. I confirmed the escaping works (the `<b onmouseover=...>` input is rendered as `&lt;b ...`) and suppressed that single line with `# nosec B702` and a comment explaining why. Another example: Bandit B413 warned about `Crypto.Cipher` as "pyCrypto, deprecated", even though I was using the maintained pycryptodome. I switched to the `cryptography` package that Bandit recommends, which also removed the warning.
+
+**3. How would you integrate static analysis tools into your actual software development workflow?**
+I would run Flake8 and Pylint in the editor (VS Code) so problems show while typing. I would add a pre-commit hook that runs Flake8 and Bandit before every commit. In CI (for example GitHub Actions) I would run Pylint, Flake8 and Bandit on every pull request and block the merge if the Pylint score falls below a threshold or Bandit reports medium or high findings. Suppressions such as `# nosec` would need a written reason that a reviewer can check.
+
+**4. What tangible improvements did you observe in the code quality, readability, or potential robustness after applying the fixes?**
+Pylint went from 4.43/10 to 10.00/10, and Bandit and Flake8 went from many findings to none. The security posture is better: no secrets in source, authenticated and randomised encryption, escaped HTML, safe XML parsing and unpredictable coupon codes. The program now behaves correctly: 3 payment attempts, no negative invoices, correct refund and proration, month-end-safe billing dates, and money rounded to 2 decimals. The code is more readable (snake_case names, docstrings, short lines) and safer to reuse because importing the module no longer runs the demo.
