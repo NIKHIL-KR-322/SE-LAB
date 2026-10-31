@@ -1,3 +1,4 @@
+@'
 # L6_L7_62 — Attendance Eligibility
 
 Lab 6: Code and Branch Coverage
@@ -12,7 +13,26 @@ A small Python module that calculates a student's attendance percentage with med
 |------|-------------|
 | `attendance_eligibility.py` | The module under test |
 | `test_attendance_eligibility.py` | Starter test file |
+| `CodeCoverageTest_PES2UG25CS815_application.py` | Test cases for code coverage |
+| `BranchCoverageTest_PES2UG25CS815_application.py` | Test cases for branch coverage |
 
-Keep all your Lab 6 work in this `LAB6` folder. Lab 7 will be added to this repo later.
+## Coverage Results
 
-Refer to the lab handout for instructions.
+- Code Coverage: 100%
+- Branch Coverage: 100%
+- Branch tests passed: 22
+
+## Tools Used
+
+- Python
+- pytest
+- coverage.py
+
+## Running the Tests
+
+Run code coverage:
+
+```bash
+coverage erase
+coverage run -m pytest LAB6/CodeCoverageTest_PES2UG25CS815_application.py
+coverage report -m LAB6/attendance_eligibility.py
