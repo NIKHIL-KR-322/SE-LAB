@@ -35,4 +35,17 @@ Run code coverage:
 ```bash
 coverage erase
 coverage run -m pytest LAB6/CodeCoverageTest_PES2UG25CS815_application.py
+coverage report -m LAB6/attendance_eligibility.py## Branch Coverage Analysis
+
+Branch coverage measures whether every possible decision outcome (True and False) in the program has been executed by the test cases.
+
+### Branch Coverage Test File
+
+`BranchCoverageTest_PES2UG25CS815_application.py`
+
+### Test Execution
+
+```bash
+coverage erase
+coverage run --branch -m pytest LAB6/BranchCoverageTest_PES2UG25CS815_application.py -v
 coverage report -m LAB6/attendance_eligibility.py
